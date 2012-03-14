@@ -7,8 +7,8 @@
         <authors>Prabir Shrestha</authors>
         <description>Mockable HTTP Helper for.NET2.0+/SL4+/WP7/WinRT (supports Task Parallel Library/async/await)</description>
         <language>en-US</language>
-        <licenseUrl>https://github.com/prabirshrestha/FluentHttp/blob/master/LICENSE</licenseUrl>
-        <projectUrl>https://github.com/prabirshrestha/FluentHttp/</projectUrl>
+        <licenseUrl>https://github.com/facebook-csharp-sdk/FluentHttp.Core/blob/master/LICENSE</licenseUrl>
+        <projectUrl>https://github.com/facebook-csharp-sdk/FluentHttp.Core</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <tags>FluentHttp web REST HTTP API services wrapper</tags>
     </metadata>
