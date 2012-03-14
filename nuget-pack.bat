@@ -1,3 +1,3 @@
 @echo off
-NuGet.exe pack FluentHttpHelper.nuspec
+NuGet.exe pack HttpHelper.nuspec
 pause

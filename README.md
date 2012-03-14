@@ -1,7 +1,7 @@
-# FluentHttpHelper
+# HttpHelper
 
 ## Overview
-FluentHttpHelper is a light weight library aimed to ease the development for your rest client with
+HttpHelper is a light weight library aimed to ease the development for your rest client with
 consistent api throughout different frameworks whether you are using .net 4.0 or silverlight or
 window phone. (It is not aimed to be used directly by the developers, but rather for creating 
 a http client wrapper, such as for Facebook, Github, Twitter, Google etc.)

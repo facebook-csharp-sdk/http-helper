@@ -1,5 +1,5 @@
 ﻿﻿//-----------------------------------------------------------------------
-// <copyright file="FluentHttpHelper.cs.pp" company="The Outercurve Foundation">
+// <copyright file="HttpHelper.cs.pp" company="The Outercurve Foundation">
 //    Copyright (c) 2011, The Outercurve Foundation. 
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");

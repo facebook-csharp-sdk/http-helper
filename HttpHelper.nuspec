@@ -1,19 +1,19 @@
 <?xml version='1.0'?>
 <package xmlns='http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd'>
     <metadata>
-        <id>FluentHttpHelper</id>
+        <id>HttpHelper</id>
         <version>0.6.3.0</version>
         <title/>
         <authors>Outercurve Foundation</authors>
         <owners>Prabir Shrestha</owners>
         <description>Mockable HTTP Helper for.NET2.0+/SL4+/WP7/WinRT (supports Task Parallel Library/async/await)</description>
         <language>en-US</language>
-        <licenseUrl>https://github.com/facebook-csharp-sdk/FluentHttpHelper/blob/master/LICENSE.txt</licenseUrl>
-        <projectUrl>https://github.com/facebook-csharp-sdk/FluentHttpHelper</projectUrl>
+        <licenseUrl>https://github.com/facebook-csharp-sdk/HttpHelper/blob/master/LICENSE.txt</licenseUrl>
+        <projectUrl>https://github.com/facebook-csharp-sdk/HttpHelper</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <tags>HttpHelper FluentHttp web REST HTTP API services wrapper</tags>
     </metadata>
 	<files>
-		<file src="FluentHttpHelper.cs.pp" target="content\FluentHttpHelper.cs.pp" />
+		<file src="HttpHelper.cs.pp" target="content\HttpHelper.cs.pp" />
 	</files>
 </package>
