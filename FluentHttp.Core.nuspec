@@ -2,7 +2,7 @@
 <package xmlns='http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd'>
     <metadata>
         <id>FluentHttp.Core</id>
-        <version>0.6.2.0</version>
+        <version>0.6.3.0</version>
         <title/>
         <authors>Prabir Shrestha</authors>
         <description>Mockable HTTP Helper for.NET2.0+/SL4+/WP7/WinRT (supports Task Parallel Library/async/await)</description>
