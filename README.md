@@ -1,7 +1,7 @@
-# FluentHttp
+# FluentHttpHelper
 
 ## Overview
-FluentHttp is a light weight library aimed to ease the development for your rest client with
+FluentHttpHelper is a light weight library aimed to ease the development for your rest client with
 consistent api throughout different frameworks whether you are using .net 4.0 or silverlight or
 window phone. (It is not aimed to be used directly by the developers, but rather for creating 
 a http client wrapper, such as for Facebook, Github, Twitter, Google etc.)
@@ -110,8 +110,3 @@ authenticators. (These authenticators are not part of the core FluentHttp.dll an
 be included manually which can be found [here](https://github.com/prabirshrestha/FluentHttp/tree/master/src/FluentHttp.Tests/FluentAuthenticators).)
 
 	request.AuthenticateUsing(new HttpBasicAuthenticator("username", "password");
-
-## License
-FluentHttp is intended to be used in both open-source and commercial environments.
-
-FluentHttp is licensed under Apache License 2.0.
