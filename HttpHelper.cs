@@ -22,9 +22,9 @@ using System.Threading;
 #if FLUENTHTTP_CORE_TPL
 using System.Threading.Tasks;
 #endif
-using Facebook;
 
-namespace Facebook
+
+namespace FluentHttp
 {
 	/// <summary>
 	/// Represents the http web request wrapper.
