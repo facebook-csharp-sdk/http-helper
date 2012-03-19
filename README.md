@@ -1,5 +1,7 @@
 # HttpHelper
 
+This project has been renamed and was formerly called FluentHttp.Core.
+
 ## Overview
 HttpHelper is a light weight library aimed to ease the development for your rest client with
 consistent api throughout different frameworks whether you are using .net 4.0 or silverlight or
