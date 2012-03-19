@@ -18,3 +18,9 @@ a http client wrapper, such as for Facebook, Github, Twitter, Google etc.)
 * Silverlight 4.0
 * Windows Phone 7
 * Mono
+
+## NuGet
+
+```
+Install-Package HttpHelper
+```
