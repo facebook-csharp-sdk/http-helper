@@ -14,18 +14,22 @@
 //    limitations under the License.
 // </copyright>
 // <author>Prabir Shrestha (prabir.me)</author>
-// <website>https://github.com/facebook-csharp-sdk/HttpHelper</website>
+// <website>https://github.com/facebook-csharp-sdk/http-helper</website>
 //-----------------------------------------------------------------------
 
-// Install-Package FluentHttpHelper
+// Install-Package HttpHelper
 
-//#define FLUENTHTTP_STRING_HELPERS
-//#define FLUENTHTTP_CORE_TPL
-//#define FLUENTHTTP_CORE_STREAM
-//#define FLUENTHTTP_URLENCODING
-//#define FLUENTHTTP_HTMLENCODING
-//#define FLUENTHTTP_HTTPBASIC_AUTHENTICATION
-//#define FLUENTHTTP_HTTPHELPER_PUBLIC
+//#define HTTPHELPER_TPL
+//#define HTTPHELPER_HELPERS
+//#define HTTPHELPER_STREAM
+//#define HTTPHELPER_URLENCODING
+//#define HTTPHELPER_HTMLENCODING
+//#define HTTPHELPER_HTTPBASIC_AUTHENTICATION
+//#define HTTPHELPER_PUBLIC
+
+#if NETFX_CORE
+#define HTTPHELPER_TPL
+#endif
 
 using System;
 using System.Collections;
@@ -35,7 +39,7 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Threading;
-#if FLUENTHTTP_CORE_TPL
+#if HTTPHELPER_TPL
 using System.Threading.Tasks;
 #endif
 
@@ -377,7 +381,7 @@ namespace $rootnamespace$
             return _httpWebRequest.EndGetRequestStream(asyncResult);
         }
 
-#if FLUENTHTTP_CORE_TPL
+#if HTTPHELPER_TPL
 
         /// <summary>
         /// Asynchronously gets the response.
@@ -693,7 +697,7 @@ namespace $rootnamespace$
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-#if FLUENTHTTP_HTTPHELPER_PUBLIC
+#if HTTPHELPER_PUBLIC
         public
 #else
     internal
@@ -705,7 +709,7 @@ namespace $rootnamespace$
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-#if FLUENTHTTP_HTTPHELPER_PUBLIC
+#if HTTPHELPER_PUBLIC
         public
 #else
     internal
@@ -715,7 +719,7 @@ namespace $rootnamespace$
     /// <summary>
     /// Open read completed event args.
     /// </summary>
-#if FLUENTHTTP_HTTPHELPER_PUBLIC
+#if HTTPHELPER_PUBLIC
         public
 #else
     internal
@@ -753,7 +757,7 @@ namespace $rootnamespace$
     /// <summary>
     /// Open write completed event args.
     /// </summary>
-#if FLUENTHTTP_HTTPHELPER_PUBLIC
+#if HTTPHELPER_PUBLIC
         public
 #else
     internal
@@ -791,7 +795,7 @@ namespace $rootnamespace$
     /// <summary>
     /// Http helper.
     /// </summary>
-#if FLUENTHTTP_HTTPHELPER_PUBLIC
+#if HTTPHELPER_PUBLIC
         public
 #else
     internal
@@ -1117,7 +1121,7 @@ namespace $rootnamespace$
                 HttpWebRequest.Abort();
         }
 
-#if FLUENTHTTP_CORE_TPL
+#if HTTPHELPER_TPL
 
         static void TransferCompletionToTask<T>(TaskCompletionSource<T> tcs, AsyncCompletedEventArgs e, Func<T> getResult, Action unregisterHandler)
         {
@@ -1297,7 +1301,7 @@ namespace $rootnamespace$
 
         #region UrlEncoding/UrlDecoding
 
-#if FLUENTHTTP_URLENCODING
+#if HTTPHELPER_URLENCODING
 
         /// <summary>
         /// Url encodes the specified string.
@@ -1435,7 +1439,7 @@ namespace $rootnamespace$
 
         #region HtmlDecoding
 
-#if FLUENTHTTP_HTMLENCODING
+#if HTTPHELPER_HTMLENCODING
 
 #if !(SILVERLIGHT || WINDOWS_PHONE)
 
@@ -1948,7 +1952,7 @@ namespace $rootnamespace$
 
         #region Utils
 
-#if FLUENTHTTP_HELPERS
+#if HTTPHELPER_HELPERS
 
                 /// <summary>
                 /// Add starting slash if not present.
@@ -2059,7 +2063,7 @@ namespace $rootnamespace$
 
 #endif
 
-#if FLUENTHTTP_CORE_STREAM
+#if HTTPHELPER_STREAM
 
                 /// <summary>
                 /// Action delegate.
@@ -2109,7 +2113,7 @@ namespace $rootnamespace$
                         }
                 }
 
-#if FLUENTHTTP_CORE_TPL
+#if HTTPHELPER_TPL
 
                 /// <summary>
                 /// Asynchronously reads the stream.
@@ -2145,7 +2149,7 @@ namespace $rootnamespace$
 
         #region Authentication
 
-#if FLUENTHTTP_HTTPBASIC_AUTHENTICATION
+#if HTTPHELPER_HTTPBASIC_AUTHENTICATION
 
                 /// <summary>
                 /// Sets the http basic authorization header on the http web request.
