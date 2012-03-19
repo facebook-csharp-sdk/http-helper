@@ -8,10 +8,10 @@
         <owners>Prabir Shrestha</owners>
         <description>Mockable HTTP Helper for.NET2.0+/SL4+/WP7/WinRT (supports Task Parallel Library/async/await)</description>
         <language>en-US</language>
-        <licenseUrl>https://github.com/facebook-csharp-sdk/HttpHelper/blob/master/LICENSE.txt</licenseUrl>
-        <projectUrl>https://github.com/facebook-csharp-sdk/HttpHelper</projectUrl>
+        <licenseUrl>https://github.com/facebook-csharp-sdk/http-helper/blob/master/LICENSE.txt</licenseUrl>
+        <projectUrl>https://github.com/facebook-csharp-sdk/http-helper</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <tags>HttpHelper FluentHttp web REST HTTP API services wrapper</tags>
+        <tags>HttpHelper web REST HTTP API services wrapper FluentHttp</tags>
     </metadata>
 	<files>
 		<file src="HttpHelper.cs.pp" target="content\HttpHelper.cs.pp" />
