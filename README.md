@@ -112,6 +112,7 @@ Make an asynchrounous GET request to https://graph.facebook.com/4 and call the c
 `Action<string, object, bool, Exception>` is mapped to response string, userState, isCancelled and Exception. 
 
 ```csharp
+
 public static void GetAsyncSample(Action<string, object, bool, Exception> callback = null, object userState = null)
 {
     var httpHelper = new HttpHelper("https://graph.facebook.com/4");
@@ -120,7 +121,11 @@ public static void GetAsyncSample(Action<string, object, bool, Exception> callba
         (o, e) =>
         {
             if (callback == null)
+            {
+                // make sure to dispose the response stream
+                using (var stream = e.Result) { }
                 return;
+            }
 
             if (e.Cancelled)
                 callback(null, e.UserState, true, null);
@@ -128,13 +133,21 @@ public static void GetAsyncSample(Action<string, object, bool, Exception> callba
                 callback(null, e.UserState, false, e.Error);
             else
             {
-                using (var stream = e.Result)
+                try
                 {
-                    using (var reader = new StreamReader(stream))
+                    using (var stream = e.Result)
                     {
-                        callback(reader.ReadToEnd(), e.UserState, false, null);
+                        using (var reader = new StreamReader(stream))
+                        {
+                            callback(reader.ReadToEnd(), e.UserState, false, null);
+                        }
                     }
                 }
+                catch (Exception ex)
+                {
+                    callback(null, e.UserState, false, ex);
+                }
+
             }
         };
 
