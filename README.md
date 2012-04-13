@@ -56,7 +56,7 @@ public static string GetSyncSample()
 
 Make an asynchrounous GET request to https://graph.facebook.com/4 and return the response as task of string.
 
-`HTTPHELPER_TPL` conditional compilation symbol must be deinfed inorder to use XTaskAsync methods.
+`HTTPHELPER_TPL` conditional compilation symbol must be deinfed in order to use XTaskAsync methods.
 
 ```csharp
 public static Task<string> GetAsyncTaskSample(CancellationToken cancellationToken = default(CancellationToken))
@@ -67,7 +67,7 @@ public static Task<string> GetAsyncTaskSample(CancellationToken cancellationToke
         .OpenReadTaskAsync(cancellationToken)
         .ContinueWith(t =>
                           {
-                              // propagate previous task exceptions which correctly.
+                              // propagate previous task exceptions correctly.
                               if (t.IsFaulted || t.IsCanceled) t.Wait();
 
                               using (var stream = t.Result)
