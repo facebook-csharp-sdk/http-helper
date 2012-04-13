@@ -33,10 +33,10 @@ Install-Package HttpHelper
 
 *Synchronous methods are not supported in Silverlight/Windows Phone/WinRT (Windows Metro Apps)*
 
-Make a GET request to https://graph.facebook.com/4 and write the response as string to console.
+Make a GET request to https://graph.facebook.com/4 and return the response as string.
 
 ```csharp
-public static void GetSyncSample()
+public static string GetSyncSample()
 {
     var httpHelper = new HttpHelper("https://graph.facebook.com/4");
 
@@ -44,8 +44,7 @@ public static void GetSyncSample()
     {
         using (var reader = new StreamReader(stream))
         {
-            var result = reader.ReadToEnd();
-            Console.WriteLine(result);
+            return reader.ReadToEnd();
         }
     }
 }
