@@ -27,6 +27,8 @@ Install-Package HttpHelper
 
 ## Samples
 
+**Note: The developer is reponsible for manually disposing request (write) and response (read) streams.**
+
 ### HTTP GET
 
 #### Synchronous Sample
@@ -112,7 +114,6 @@ Make an asynchrounous GET request to https://graph.facebook.com/4 and call the c
 `Action<string, object, bool, Exception>` is mapped to response string, userState, isCancelled and Exception. 
 
 ```csharp
-
 public static void GetAsyncSample(Action<string, object, bool, Exception> callback = null, object userState = null)
 {
     var httpHelper = new HttpHelper("https://graph.facebook.com/4");
@@ -123,7 +124,8 @@ public static void GetAsyncSample(Action<string, object, bool, Exception> callba
             if (callback == null)
             {
                 // make sure to dispose the response stream
-                using (var stream = e.Result) { }
+                if(!e.Cancelled && e.Error != null)
+                    using (var stream = e.Result) { }
                 return;
             }
 
