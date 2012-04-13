@@ -67,6 +67,7 @@ public static Task<string> GetAsyncTaskSample(CancellationToken cancellationToke
         .OpenReadTaskAsync(cancellationToken)
         .ContinueWith(t =>
                           {
+                              // propagate previous task exceptions which correctly.
                               if (t.IsFaulted || t.IsCanceled) t.Wait();
 
                               using (var stream = t.Result)
