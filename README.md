@@ -27,7 +27,10 @@ Install-Package HttpHelper
 
 ## Samples
 
-**Note: The developer is reponsible for manually disposing request (write) and response (read) streams.**
+**Note:**
+
+* **The developer is reponsible for manually disposing request (write) and response (read) streams.**
+* **Always create new instance of `HttpHelper` for each new requests.**
 
 ### HTTP GET
 
