@@ -103,3 +103,43 @@ public static Task<string> GetAsyncTaskSample(CancellationToken cancellationToke
                           });
 }
 ```
+
+#### Asynchronous Sample with Event Programming Model (EPM)
+
+*Available in all .NET plaforms.*
+
+Make an asynchrounous GET request to https://graph.facebook.com/4 and call the callback on completion.
+`Action<string, object, bool, Exception>` is mapped to response string, userState, isCancelled and Exception. 
+
+```csharp
+public static void GetAsyncSample(Action<string, object, bool, Exception> callback = null, object userState = null)
+{
+    var httpHelper = new HttpHelper("https://graph.facebook.com/4");
+
+    httpHelper.OpenReadCompleted +=
+        (o, e) =>
+        {
+            if (callback == null)
+                return;
+
+            if (e.Cancelled)
+                callback(null, e.UserState, true, null);
+            else if (e.Error != null)
+                callback(null, e.UserState, false, e.Error);
+            else
+            {
+                using (var stream = e.Result)
+                {
+                    using (var reader = new StreamReader(stream))
+                    {
+                        callback(reader.ReadToEnd(), e.UserState, false, null);
+                    }
+                }
+            }
+        };
+
+    httpHelper.OpenReadAsync(userState);
+}
+```
+
+You can cancel the asynhrouns requests for EPM using `httpHelper.CancelAsync()` method.
