@@ -157,4 +157,4 @@ public static void GetAsyncSample(Action<string, object, bool, Exception> callba
 }
 ```
 
-You can cancel the asynhrouns requests for EPM using `httpHelper.CancelAsync()` method.
+You can cancel the asynchronous requests for EPM using `httpHelper.CancelAsync()` method.
