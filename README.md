@@ -50,6 +50,29 @@ public static string GetSyncSample()
 }
 ```
 
+#### Asynchronous Sample with Async/Await
+
+*Available only in .NET 4.5+, and WinRT (Windows Metro Apps)*
+
+Make an asynchrounous GET request to https://graph.facebook.com/4 and return the response as task of string.
+
+`HTTPHELPER_TPL` conditional compilation symbol must be deinfed in order to use XTaskAsync methods.
+
+```csharp
+public static async Task<string> GetAsyncAwaitSample(CancellationToken cancellationToken = default(CancellationToken))
+{
+    var httpHelper = new HttpHelper("https://graph.facebook.com/4");
+
+    using (var stream = await httpHelper.OpenReadTaskAsync(cancellationToken))
+    {
+        using (var reader = new StreamReader(stream))
+        {
+            return reader.ReadToEnd();
+        }
+    }
+}
+```
+
 #### Asynchronous Sample with Task Parallel Library (TPL)
 
 *Available only in .NET 4.0+, SL5 and WinRT (Windows Metro Apps)*
