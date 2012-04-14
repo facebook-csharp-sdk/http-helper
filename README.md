@@ -161,3 +161,61 @@ public static void GetAsyncSample(Action<string, object, bool, Exception> callba
 ```
 
 You can cancel the asynchronous requests for EPM using `httpHelper.CancelAsync()` method.
+
+### HTTP POST
+
+#### Synchronous Sample
+
+*Synchronous methods are not supported in Silverlight/Windows Phone/WinRT (Windows Metro Apps)*
+
+Make a POST request to https://graph.facebook.com/me/feed and returns the response as string. 
+For the below sample you can get the `access_token` from http://developers.facebook.com/tools/explorer/ 
+Make sure you have `publish_stream` exteneded permission which is required to post to your facebook wall.
+
+`HTTPHELPER_URLENCODING` conditional compilation symbol must be defined in order to use 
+`HttpHelper.UrlEncode` or `HttpHelper.UrlDecode` methods.
+
+Windows Phone and WinRT (Windows Metro Apps) do not have the property ContentLength for HttpWebRequest. In order to reduce
+the `#if (WINDOWS_PHONE || NETFX_CORE)` you can use the `TrySetContentLength` method.
+
+```csharp
+public static string PostSyncSample(IEnumerable<KeyValuePair<string, string>> parameters)
+{
+    var httpHelper = new HttpHelper("https://graph.facebook.com/me/feed");
+    var request = httpHelper.HttpWebRequest;
+    request.Method = "POST";
+    request.ContentType = "application/form-url-encoded";
+
+    var bodyString = new StringBuilder();
+    foreach (var kvp in parameters)
+        bodyString.AppendFormat("{0}={1}&", HttpHelper.UrlEncode(kvp.Key), HttpHelper.UrlEncode(kvp.Value));
+    if (bodyString.Length > 0)
+        bodyString.Length -= 1;
+
+    var bodyByteArray = Encoding.UTF8.GetBytes(bodyString.ToString());
+    request.TrySetContentLength(bodyByteArray.Length);
+
+    // write to request body only if we have data, otherwise directly open the read stream
+    if (bodyByteArray.Length > 0)
+    {
+        using (var stream = httpHelper.OpenWrite())
+        {
+            stream.Write(bodyByteArray, 0, bodyByteArray.Length);
+        }
+    }
+
+    using (var stream = httpHelper.OpenRead())
+    {
+        using (var reader = new StreamReader(stream))
+        {
+            return reader.ReadToEnd();
+        }
+    }
+}
+
+var parameters = new Dictionary<string, string>();
+parameters["message"] = "Hi from HttpHelper";
+parameters["access_token"] = "";
+var result = PostSyncSample(parameters);
+Console.WriteLine(result);
+```
