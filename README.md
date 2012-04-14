@@ -170,7 +170,7 @@ You can cancel the asynchronous requests for EPM using `httpHelper.CancelAsync()
 
 Make a POST request to https://graph.facebook.com/me/feed and return the response as string. 
 For the below sample you can get the `access_token` from http://developers.facebook.com/tools/explorer/ 
-Make sure you have `publish_stream` exteneded permission which is required to post to your facebook wall.
+Make sure you have `publish_stream` extended permission which is required to post to your facebook wall.
 
 `HTTPHELPER_URLENCODING` conditional compilation symbol must be defined in order to use 
 `HttpHelper.UrlEncode` or `HttpHelper.UrlDecode` methods.
