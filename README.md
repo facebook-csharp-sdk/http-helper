@@ -168,7 +168,7 @@ You can cancel the asynchronous requests for EPM using `httpHelper.CancelAsync()
 
 *Synchronous methods are not supported in Silverlight/Windows Phone/WinRT (Windows Metro Apps)*
 
-Make a POST request to https://graph.facebook.com/me/feed and returns the response as string. 
+Make a POST request to https://graph.facebook.com/me/feed and return the response as string. 
 For the below sample you can get the `access_token` from http://developers.facebook.com/tools/explorer/ 
 Make sure you have `publish_stream` exteneded permission which is required to post to your facebook wall.
 
