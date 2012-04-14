@@ -4,7 +4,7 @@ This project has been renamed and was formerly called FluentHttp.Core.
 
 ## Overview
 HttpHelper is a light weight library aimed to ease the development for your rest client with
-consistent api throughout different frameworks whether you are using .net 4.0 or silverlight or
+consistent api throughout different frameworks whether you are using .net 2.0+ or silverlight or
 window phone. (It is not aimed to be used directly by the developers, but rather for creating 
 a http client wrapper, such as for Facebook, Github, Twitter, Google etc.)
 
@@ -61,7 +61,7 @@ public static string GetSyncSample()
 
 Make an asynchrounous GET request to https://graph.facebook.com/4 and return the response as task of string.
 
-`HTTPHELPER_TPL` conditional compilation symbol must be deinfed in order to use XTaskAsync methods.
+`HTTPHELPER_TPL` conditional compilation symbol must be defined in order to use XTaskAsync methods.
 
 ```csharp
 public static async Task<string> GetAsyncAwaitSample(CancellationToken cancellationToken = default(CancellationToken))
@@ -84,7 +84,7 @@ public static async Task<string> GetAsyncAwaitSample(CancellationToken cancellat
 
 Make an asynchrounous GET request to https://graph.facebook.com/4 and return the response as task of string.
 
-`HTTPHELPER_TPL` conditional compilation symbol must be deinfed in order to use XTaskAsync methods.
+`HTTPHELPER_TPL` conditional compilation symbol must be defined in order to use XTaskAsync methods.
 
 ```csharp
 public static Task<string> GetAsyncTaskSample(CancellationToken cancellationToken = default(CancellationToken))
