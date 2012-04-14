@@ -152,7 +152,6 @@ public static void GetAsyncSample(Action<string, object, bool, Exception> callba
                 {
                     callback(null, e.UserState, false, ex);
                 }
-
             }
         };
 
