@@ -884,28 +884,28 @@ namespace $rootnamespace$
         /// <exception cref="Exception"></exception>
         public virtual Stream OpenWrite()
         {
-                try
-                {
-                        return _httpWebRequest.GetRequestStream();
-                }
-                catch (WebException webException)
-                {
-                        if (webException.Response != null)
-                                _httpWebResponse = new HttpWebResponseWrapper((HttpWebResponse)webException.Response);
-                        _innerException = webException;
-                        throw new WebExceptionWrapper(webException);
-                }
-                catch (WebExceptionWrapper webException)
-                {
-                        _httpWebResponse = webException.GetResponse();
-                        _innerException = webException;
-                        throw;
-                }
-                catch (Exception ex)
-                {
-                        _innerException = new WebExceptionWrapper(new WebException(ErrorPerformingHttpRequest, ex));
-                        throw _innerException;
-                }
+            try
+            {
+                    return _httpWebRequest.GetRequestStream();
+            }
+            catch (WebException webException)
+            {
+                    if (webException.Response != null)
+                            _httpWebResponse = new HttpWebResponseWrapper((HttpWebResponse)webException.Response);
+                    _innerException = webException;
+                    throw new WebExceptionWrapper(webException);
+            }
+            catch (WebExceptionWrapper webException)
+            {
+                    _httpWebResponse = webException.GetResponse();
+                    _innerException = webException;
+                    throw;
+            }
+            catch (Exception ex)
+            {
+                    _innerException = new WebExceptionWrapper(new WebException(ErrorPerformingHttpRequest, ex));
+                    throw _innerException;
+            }
         }
 
         /// <summary>
@@ -915,30 +915,41 @@ namespace $rootnamespace$
         /// <exception cref="Exception"></exception>
         public virtual Stream OpenRead()
         {
-                try
+            try
+            {
+                if (_httpWebResponse == null)
+                        _httpWebResponse = _httpWebRequest.GetResponse();
+                return _httpWebResponse.GetResponseStream();
+            }
+            catch (WebException webException)
+            {
+                _innerException = new WebExceptionWrapper(webException);
+                if (webException.Response != null)
                 {
-                        if (_httpWebResponse == null)
-                                _httpWebResponse = _httpWebRequest.GetResponse();
-                        return _httpWebResponse.GetResponseStream();
+                    _httpWebResponse = new HttpWebResponseWrapper((HttpWebResponse) webException.Response);
+                    var stream = _httpWebResponse.GetResponseStream();
+                    if (stream != null)
+                        return stream;
                 }
-                catch (WebException webException)
+                throw _innerException;
+            }
+            catch (WebExceptionWrapper webException)
+            {
+                _innerException = webException;
+                _httpWebResponse = webException.GetResponse();
+                if(_httpWebResponse!=null)
                 {
-                        if (webException.Response != null)
-                                _httpWebResponse = new HttpWebResponseWrapper((HttpWebResponse)webException.Response);
-                        _innerException = new WebExceptionWrapper(webException);
-                        throw _innerException;
+                    var stream = _httpWebResponse.GetResponseStream();
+                    if (stream != null)
+                        return stream;
                 }
-                catch (WebExceptionWrapper webException)
-                {
-                        _httpWebResponse = webException.GetResponse();
-                        _innerException = webException;
-                        throw _innerException;
-                }
-                catch (Exception ex)
-                {
-                        _innerException = new WebExceptionWrapper(new WebException(ErrorPerformingHttpRequest, ex));
-                        throw _innerException;
-                }
+                throw _innerException;
+            }
+            catch (Exception ex)
+            {
+                _innerException = new WebExceptionWrapper(new WebException(ErrorPerformingHttpRequest, ex));
+                throw _innerException;
+            }
         }
 
 #endif
@@ -1096,13 +1107,18 @@ namespace $rootnamespace$
             catch (WebException webException)
             {
                 if (webException.Response != null)
+                {
                     _httpWebResponse = new HttpWebResponseWrapper((HttpWebResponse)webException.Response);
+                    stream = _httpWebResponse.GetResponseStream();
+                }
                 webExceptionWrapper = new WebExceptionWrapper(webException);
                 _innerException = webExceptionWrapper;
             }
             catch (WebExceptionWrapper webException)
             {
                 _httpWebResponse = webException.GetResponse();
+                if (_httpWebResponse != null)
+                    stream = _httpWebResponse.GetResponseStream();
                 webExceptionWrapper = webException;
                 _innerException = webExceptionWrapper;
             }
@@ -1112,7 +1128,7 @@ namespace $rootnamespace$
                 _innerException = webExceptionWrapper;
             }
 
-            OnOpenReadCompleted(new OpenReadCompletedEventArgs(stream, webExceptionWrapper, webExceptionWrapper != null && webExceptionWrapper.Status == WebExceptionStatus.RequestCanceled, userToken));
+            OnOpenReadCompleted(new OpenReadCompletedEventArgs(stream, stream == null ? webExceptionWrapper : null, webExceptionWrapper != null && webExceptionWrapper.Status == WebExceptionStatus.RequestCanceled, userToken));
         }
 
         private void ScanTimoutCallback(object state, bool timedOut)
