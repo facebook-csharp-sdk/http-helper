@@ -1313,6 +1313,17 @@ namespace $rootnamespace$
             return Uri.EscapeDataString(s);
         }
 
+        public static string UrlEncodeRfc3986(string s)
+        {
+            // todo: optimize
+            return UrlEncode(s)
+                .Replace("!", "%21")
+                .Replace("*", "%2A")
+                .Replace("'", "%27")
+                .Replace("(", "%28")
+                .Replace(")", "%29");
+        }
+
         /// <summary>
         /// Url decodes the specified string.
         /// </summary>
