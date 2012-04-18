@@ -22,7 +22,7 @@
 //#define HTTPHELPER_TPL
 //#define HTTPHELPER_HELPERS
 //#define HTTPHELPER_STREAM
-//#define HTTPHELPER_URLENCODING
+//#define HTTPHELPER_NOURLENCODING
 //#define HTTPHELPER_HTMLENCODING
 //#define HTTPHELPER_HTTPBASIC_AUTHENTICATION
 //#define HTTPHELPER_PUBLIC
@@ -1301,7 +1301,7 @@ namespace $rootnamespace$
 
         #region UrlEncoding/UrlDecoding
 
-#if HTTPHELPER_URLENCODING
+#if !HTTPHELPER_NOURLENCODING
 
         /// <summary>
         /// Url encodes the specified string.
