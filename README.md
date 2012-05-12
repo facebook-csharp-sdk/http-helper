@@ -13,6 +13,7 @@ a http client wrapper, such as for Facebook, Github, Twitter, Google etc.)
 * .NET 4.5
 * .NET 4.0 (client profile supported)
 * .NET 3.5 (client profile supported)
+* .NET 3.0
 * .NET 2.0
 * WINRT (Windows Metro Style Applications)
 * Silverlight 4.0
