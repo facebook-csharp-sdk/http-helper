@@ -643,6 +643,16 @@ namespace $rootnamespace$
         /// <summary>
         /// Initializes a new instance of the <see cref="WebExceptionWrapper"/> class.
         /// </summary>
+        /// <param name="message">Error message.</param>
+        /// <param name="innerException">The inner exception.</param>
+        protected WebExceptionWrapper(string message, Exception innerException)
+            : base(message, innerException)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WebExceptionWrapper"/> class.
+        /// </summary>
         public WebExceptionWrapper(WebException webException)
             : base(webException == null ? null : webException.Message, webException == null ? null : webException.InnerException)
         {
