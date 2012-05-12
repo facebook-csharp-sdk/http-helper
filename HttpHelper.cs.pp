@@ -24,7 +24,7 @@
 //#define HTTPHELPER_STREAM
 //#define HTTPHELPER_NO_URLENCODING
 //#define HTTPHELPER_HTMLENCODING
-//#define HTTPHELPER_HTTPBASIC_AUTHENTICATION
+//#define HTTPHELPER_NO_HTTPBASIC_AUTHENTICATION
 //#define HTTPHELPER_PUBLIC
 
 #if NETFX_CORE
@@ -2218,7 +2218,7 @@ namespace $rootnamespace$
 
         #region Authentication
 
-#if HTTPHELPER_HTTPBASIC_AUTHENTICATION
+#if !HTTPHELPER_NO_HTTPBASIC_AUTHENTICATION
 
         /// <summary>
         /// Sets the http basic authorization header on the http web request.
