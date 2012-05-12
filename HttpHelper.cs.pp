@@ -25,6 +25,7 @@
 //#define HTTPHELPER_NO_URLENCODING
 //#define HTTPHELPER_HTMLENCODING
 //#define HTTPHELPER_NO_HTTPBASIC_AUTHENTICATION
+//#define HTTPHELPER_NO_OAUTH
 //#define HTTPHELPER_PUBLIC
 
 #if NETFX_CORE
@@ -2231,6 +2232,21 @@ namespace $rootnamespace$
         }
 
 #endif
+
+#if !HTTPHELPER_NO_OAUTH
+
+        /// <summary>
+        /// Generate OAuth Nonce
+        /// </summary>
+        public static string GenerateOAuthNonce()
+        {
+            return Convert.ToBase64String(Encoding.UTF8.GetBytes(DateTime.Now.Ticks.ToString(CultureInfo.InvariantCulture)));
+        }
+
+
+        
+#endif
+
         #endregion
     }
 }
