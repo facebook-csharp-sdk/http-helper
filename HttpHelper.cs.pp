@@ -2255,6 +2255,36 @@ namespace $rootnamespace$
             return Convert.ToInt64((DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds).ToString(CultureInfo.InvariantCulture);
         }
 
+        public static string GenerateOAuthAuthenticationHeader(string httpMethod, Uri urlWithoutQuery, IEnumerable<KeyValuePair<string, string>> parameters, string consumerKey, string consumerSecret, string token, string tokenSecret, string oauthSignatureMethod, string oauthNonce, string oauthTimestamp, string oauthVersion, HmacSha1Delegate hmacSha1)
+        {
+            if (string.IsNullOrEmpty(oauthNonce))
+                oauthNonce = GenerateOAuthNonce();
+            if (string.IsNullOrEmpty(oauthTimestamp))
+                oauthTimestamp = GenerateOAuthTimestamp();
+            if (string.IsNullOrEmpty(oauthVersion))
+                oauthVersion = "1.0";
+
+            string oauthSignature = GenerateOAuthSignature(httpMethod, urlWithoutQuery, parameters, consumerKey, consumerSecret, token, tokenSecret, oauthSignatureMethod, oauthNonce, oauthTimestamp, oauthVersion, hmacSha1);
+
+            var sb = new StringBuilder();
+            sb.AppendFormat("OAuth oauth_consumer_key=\"{0}\",oauth_nonce=\"{1}\",oauth_signature_method=\"{2}\",oauth_timestamp=\"{3}\",oauth_version=\"{4}\",oauth_signature=\"{5}\"",
+               UrlEncodeRfc3986(consumerKey), UrlEncodeRfc3986(oauthNonce), UrlEncodeRfc3986(oauthSignatureMethod), UrlEncodeRfc3986(oauthTimestamp), UrlEncodeRfc3986(oauthVersion), UrlEncodeRfc3986(oauthSignature));
+
+            if (!string.IsNullOrEmpty(token))
+                sb.AppendFormat(",oauth_token=\"{0}\"", UrlEncodeRfc3986(token));
+
+            if (parameters != null)
+            {
+                foreach (var kvp in parameters)
+                {
+                    if (kvp.Key.StartsWith("oauth_"))
+                        sb.AppendFormat(",{0}=\"{1}\"", UrlEncodeRfc3986(kvp.Key), UrlEncodeRfc3986(kvp.Value));
+                }
+            }
+
+            return sb.ToString();
+        }
+
         public static string GenerateOAuthSignature(string httpMethod, Uri uriWithoutQuery, IEnumerable<KeyValuePair<string, string>> parameters, string consumerKey, string consumerSecret, string token, string tokenSecret, string oauthSignatureMethod, string oauthNonce, string oauthTimestamp, string oauthVersion, HmacSha1Delegate hmacSha1)
         {
             if (string.IsNullOrEmpty(httpMethod))
