@@ -805,6 +805,28 @@ namespace $rootnamespace$
         private const string ErrorPerformingHttpRequest = "An error occurred performing a http web request.";
 
         /// <summary>
+        /// application/form-url-encoded content type
+        /// </summary>
+        public const string ApplicationFormUrlEncodedContentType = "application/form-url-encoded";
+
+        /// <summary>
+        /// application/x-www-form-urlencoded content type
+        /// </summary>
+        public const string ApplicationXWWWFormUrlEncodedContentType = "application/x-www-form-urlencoded";
+
+        /// <summary>
+        /// Returns multipart/form-data; boundary=.....
+        /// </summary>
+        /// <param name="boundary">The multipart boundary</param>
+        /// <returns>
+        /// multipart/form-data; boundary=... content type
+        /// </returns>
+        public static string GetMultipartFormDataBoundaryContentType(string boundary)
+        {
+            return string.Concat("multipart/form-data; boundary=", boundary);
+        }
+
+        /// <summary>
         /// Gets the inner exception.
         /// </summary>
         public Exception InnerException
