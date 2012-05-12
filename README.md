@@ -267,3 +267,72 @@ public static async Task<IDictionary<string, string>> GetRequestToken(string con
     }
 }
 ```
+
+Then generate the login url and open it in the browser.
+
+```csharp
+var requestTokenResult = await GetRequestToken("consumerKey", "consumerSecret");
+
+string token = requestTokenResult["oauth_token"];
+string tokenSecret = requestTokenResult["oauth_token_secret"];
+
+Process.Start("https://api.twitter.com/oauth/authorize?oauth_token=" + token);
+```
+
+Once you have granted access you will get some random pin number. Then get the access token use the pin.
+
+```csharp
+public static async Task<IDictionary<string, string>> GetAccessToken(string consumerKey, string consumerSecret, string token, string tokenSecret, string oauthVerifierPin, CancellationToken cancellationToken = default (CancellationToken))
+{
+    var requestTokenUri = new Uri("https://api.twitter.com/oauth/access_token");
+
+    var httHelper = new HttpHelper(requestTokenUri);
+    var request = httHelper.HttpWebRequest;
+    request.Method = "POST";
+    request.ContentType = HttpHelper.ApplicationXWWWFormUrlEncodedContentType;
+    var data = Encoding.UTF8.GetBytes(string.Concat("oauth_verifier=", oauthVerifierPin));
+    request.TrySetContentLength(data.Length);
+
+    var parameters = new Dictionary<string, string>();
+    parameters["oauth_verifier"] = oauthVerifierPin;
+
+    request.Headers["Authorization"] = HttpHelper.GenerateOAuthAuthenticationHeader(
+        "POST", requestTokenUri, parameters,
+        consumerKey, consumerSecret,
+        token, tokenSecret,
+        "HMAC-SHA1", null, null, null, null);
+
+    using (var stream = await httHelper.OpenWriteTaskAsync(cancellationToken))
+    {
+        await stream.WriteAsync(data, 0, data.Length, cancellationToken);
+    }
+
+    using (var stream = await httHelper.OpenReadTaskAsync(cancellationToken))
+    {
+        using (var reader = new StreamReader(stream))
+        {
+            var response = await reader.ReadToEndAsync();
+
+            var kvp = response.Split('&');
+            var dict = new Dictionary<string, string>();
+            foreach (var s in kvp)
+            {
+                var pair = s.Split('=');
+                if (pair.Length == 2)
+                    dict[pair[0]] = pair[1];
+            }
+
+            return dict;
+        }
+    }
+}
+
+string pin = "...";
+
+var accessTokenResult = await GetAccessToken(consumerKey, consumerSecret, token, tokenSecret, pin);
+var oauthToken = accessTokenResult["oauth_token"];
+var oauthTokenSecret = accessTokenResult["oauth_token_secret"];
+var userId = accessTokenResult["user_id"];
+var screenName = accessTokenResult["screen_name"];
+
+```
