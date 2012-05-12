@@ -2255,6 +2255,98 @@ namespace $rootnamespace$
             return Convert.ToInt64((DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds).ToString(CultureInfo.InvariantCulture);
         }
 
+        public static string GenerateOAuthSignature(string httpMethod, Uri uriWithoutQuery, IEnumerable<KeyValuePair<string, string>> parameters, string consumerKey, string consumerSecret, string token, string tokenSecret, string oauthSignatureMethod, string oauthNonce, string oauthTimestamp, string oauthVersion, HmacSha1Delegate hmacSha1)
+        {
+            if (string.IsNullOrEmpty(httpMethod))
+                throw new ArgumentNullException("httpMethod");
+            if (uriWithoutQuery == null)
+                throw new ArgumentNullException("uriWithoutQuery");
+            if (string.IsNullOrEmpty(consumerKey))
+                throw new ArgumentNullException("consumerKey");
+            if (string.IsNullOrEmpty(oauthSignatureMethod))
+                throw new ArgumentNullException("oauthSignatureMethod");
+            if (string.IsNullOrEmpty(oauthNonce))
+                oauthNonce = GenerateOAuthNonce();
+            if (string.IsNullOrEmpty(oauthTimestamp))
+                oauthTimestamp = GenerateOAuthTimestamp();
+
+            if (string.IsNullOrEmpty(oauthVersion))
+                oauthVersion = "1.0";
+
+            var sortedParameters = new List<KeyValuePair<string, string>>
+                                    {
+                                        new KeyValuePair<string, string>("oauth_consumer_key", consumerKey),
+                                        new KeyValuePair<string, string>("oauth_nonce", oauthNonce),
+                                        new KeyValuePair<string, string>("oauth_signature_method", oauthSignatureMethod),
+                                        new KeyValuePair<string, string>("oauth_timestamp", oauthTimestamp),
+                                        new KeyValuePair<string, string>("oauth_version", oauthVersion)
+                                    };
+
+            if (!string.IsNullOrEmpty(token))
+                sortedParameters.Add(new KeyValuePair<string, string>("oauth_token", token));
+
+            if (parameters != null)
+                sortedParameters.AddRange(parameters);
+
+            sortedParameters.Sort(new OAuthQueryParameterComparer());
+
+            var normalizedUrl = new StringBuilder();
+            normalizedUrl.AppendFormat("{0}://{1}", uriWithoutQuery.Scheme, uriWithoutQuery.Host);
+            if (!((uriWithoutQuery.Scheme == "http" && uriWithoutQuery.Port == 80) || (uriWithoutQuery.Scheme == "https" && uriWithoutQuery.Port == 443)))
+                normalizedUrl.AppendFormat(":{0}", uriWithoutQuery.Port);
+            normalizedUrl.Append(uriWithoutQuery.AbsolutePath);
+
+            var normalizedRequestParameters = new StringBuilder();
+            foreach (var kvp in sortedParameters)
+                normalizedRequestParameters.AppendFormat("{0}={1}&", kvp.Key, kvp.Value);
+
+            if (normalizedRequestParameters.Length > 0)
+                normalizedRequestParameters.Length--;
+
+            var signatureBase = new StringBuilder();
+            signatureBase.AppendFormat("{0}&", httpMethod);
+            signatureBase.AppendFormat("{0}&", UrlEncodeRfc3986(normalizedUrl.ToString()));
+            signatureBase.AppendFormat("{0}", UrlEncodeRfc3986(normalizedRequestParameters.ToString()));
+
+            if (oauthSignatureMethod.Equals("HMAC-SHA1"))
+            {
+                if (string.IsNullOrEmpty(consumerSecret))
+                    throw new ArgumentNullException("consumerSecret");
+
+#if !HTTPHELPER_PORTABLE_LIBRARY
+                // HMACSHA1 for portable library can be found in the contrib project at http://pclcontrib.codeplex.com
+                if (hmacSha1 == null)
+                    hmacSha1 = HmacSha1;
+#endif
+
+                byte[] key = Encoding.UTF8.GetBytes(string.Format("{0}&{1}", UrlEncodeRfc3986(consumerSecret), string.IsNullOrEmpty(tokenSecret) ? string.Empty : UrlEncodeRfc3986(tokenSecret)));
+                return Convert.ToBase64String(hmacSha1(key, Encoding.UTF8.GetBytes(signatureBase.ToString())));
+            }
+
+            throw new NotSupportedException("Only HMAC-SHA1 supported.");
+        }
+
+        private class OAuthQueryParameterComparer : IComparer<KeyValuePair<string, string>>
+        {
+            public int Compare(KeyValuePair<string, string> x, KeyValuePair<string, string> y)
+            {
+                return x.Key == y.Key ? string.CompareOrdinal(x.Value, y.Value) : string.CompareOrdinal(x.Key, y.Key);
+            }
+        }
+
+#endif
+
+        public delegate byte[] HmacSha1Delegate(byte[] key, byte[] data);
+
+#if !HTTPHELPER_PORTABLE_LIBRARY
+        /// <remarks>HMACSHA1 for portable library can be found in the contrib project at http://pclcontrib.codeplex.com</remarks>
+        public static byte[] HmacSha1(byte[] key, byte[] data)
+        {
+            using (var hmacSha1 = new System.Security.Cryptography.HMACSHA1(key))
+            {
+                return hmacSha1.ComputeHash(data);
+            }
+        }
 #endif
 
         #endregion
