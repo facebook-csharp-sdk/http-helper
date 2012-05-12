@@ -220,3 +220,50 @@ parameters["access_token"] = "";
 var result = PostSyncSample(parameters);
 Console.WriteLine(result);
 ```
+
+## Twitter OAuth Sample
+
+HttpHelper includes some basic helper methods for oauth 1.0.
+
+Here is a sample on getting the request token from twitter.
+
+Note: GenerateOAuthAuthenticationHeader will auto generate timestamps/oauth nonce values if you pass it as null. You can either manually pass your own value or use the helper methods such as `HttpHelper.GenerateOAuthNonce()`, `HttpHelper.GenerateOAuthTimestamp`.
+Since HMAC-SHA1 is not avaialble in the portable library, you will need to add reference to [Portable Library Contrib project](http://pclcontrib.codeplex.com/) and pass the appropriate `HmacSha1Delegate`.
+
+```csharp
+public static IDictionary<string, string> GetRequestToken(string consumerKey, string consumerSecret)
+{
+    var requestTokenUri = new Uri("https://api.twitter.com/oauth/request_token");
+
+    var httHelper = new HttpHelper(requestTokenUri);
+    var request = httHelper.HttpWebRequest;
+    request.Method = "POST";
+    request.ContentType = "application/json";
+
+    request.Headers["Authorization"] = HttpHelper.GenerateOAuthAuthenticationHeader(
+        "POST",
+        new Uri("https://api.twitter.com/oauth/request_token"),
+        null,
+        consumerKey, consumerSecret,
+        null, null,
+        "HMAC-SHA1", null, null, null, null);
+
+    using (var stream = httHelper.OpenRead())
+    {
+        using (var reader = new StreamReader(stream))
+        {
+            var response = reader.ReadToEnd();
+            var kvp = response.Split('&');
+            var dict = new Dictionary<string, string>();
+            foreach (var s in kvp)
+            {
+                var pair = s.Split('=');
+                if (pair.Length == 2)
+                    dict[pair[0]] = pair[1];
+            }
+
+            return dict;
+        }
+    }
+}
+```
