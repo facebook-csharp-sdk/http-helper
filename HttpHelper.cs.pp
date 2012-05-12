@@ -2243,8 +2243,14 @@ namespace $rootnamespace$
             return Convert.ToBase64String(Encoding.UTF8.GetBytes(DateTime.Now.Ticks.ToString(CultureInfo.InvariantCulture)));
         }
 
+        /// <summary>
+        /// Generate OAuth time stamp
+        /// </summary>
+        public static string GenerateOAuthTimestamp()
+        {
+            return Convert.ToInt64((DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds).ToString(CultureInfo.InvariantCulture);
+        }
 
-        
 #endif
 
         #endregion
