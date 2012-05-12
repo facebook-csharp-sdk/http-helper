@@ -227,11 +227,13 @@ HttpHelper includes some basic helper methods for oauth 1.0.
 
 Here is a sample on getting the request token from twitter.
 
-Note: GenerateOAuthAuthenticationHeader will auto generate timestamps/oauth nonce values if you pass it as null. You can either manually pass your own value or use the helper methods such as `HttpHelper.GenerateOAuthNonce()`, `HttpHelper.GenerateOAuthTimestamp`.
+Note: `GenerateOAuthAuthenticationHeader` will auto generate timestamps/oauth nonce values if you pass it as null. You can either manually pass your own value or use the helper methods such as `HttpHelper.GenerateOAuthNonce()`, `HttpHelper.GenerateOAuthTimestamp`.
 Since HMAC-SHA1 is not avaialble in the portable library, you will need to add reference to [Portable Library Contrib project](http://pclcontrib.codeplex.com/) and pass the appropriate `HmacSha1Delegate`.
 
+Make sure add `#define HTTPHELPER_TPL` if you want to use OpenReadTaskAsync method.
+
 ```csharp
-public static IDictionary<string, string> GetRequestToken(string consumerKey, string consumerSecret)
+public static async Task<IDictionary<string, string>> GetRequestToken(string consumerKey, string consumerSecret, CancellationToken cancellationToken = default (CancellationToken))
 {
     var requestTokenUri = new Uri("https://api.twitter.com/oauth/request_token");
 
@@ -241,18 +243,17 @@ public static IDictionary<string, string> GetRequestToken(string consumerKey, st
     request.ContentType = "application/json";
 
     request.Headers["Authorization"] = HttpHelper.GenerateOAuthAuthenticationHeader(
-        "POST",
-        new Uri("https://api.twitter.com/oauth/request_token"),
-        null,
+        "POST", requestTokenUri, null,
         consumerKey, consumerSecret,
         null, null,
         "HMAC-SHA1", null, null, null, null);
 
-    using (var stream = httHelper.OpenRead())
+    using (var stream = await httHelper.OpenReadTaskAsync(cancellationToken))
     {
         using (var reader = new StreamReader(stream))
         {
-            var response = reader.ReadToEnd();
+            var response = await reader.ReadToEndAsync();
+
             var kvp = response.Split('&');
             var dict = new Dictionary<string, string>();
             foreach (var s in kvp)
