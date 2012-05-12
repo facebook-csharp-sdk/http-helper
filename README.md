@@ -227,10 +227,9 @@ HttpHelper includes some basic helper methods for oauth 1.0.
 
 Here is a sample on getting the request token from twitter.
 
-Note: `GenerateOAuthAuthenticationHeader` will auto generate timestamps/oauth nonce values if you pass it as null. You can either manually pass your own value or use the helper methods such as `HttpHelper.GenerateOAuthNonce()`, `HttpHelper.GenerateOAuthTimestamp`.
-Since HMAC-SHA1 is not avaialble in the portable library, you will need to add reference to [Portable Library Contrib project](http://pclcontrib.codeplex.com/) and pass the appropriate `HmacSha1Delegate`.
+*Note: `GenerateOAuthAuthenticationHeader` will auto generate timestamps/oauth nonce values if you pass it as null. You can either manually pass your own value or use the helper methods such as `HttpHelper.GenerateOAuthNonce()`, `HttpHelper.GenerateOAuthTimestamp`. Since HMAC-SHA1 is not avaialble in the portable library, you will need to add reference to [Portable Library Contrib project](http://pclcontrib.codeplex.com/) and pass the appropriate `HmacSha1Delegate`.*
 
-Make sure add `#define HTTPHELPER_TPL` if you want to use OpenReadTaskAsync method.
+*Make sure add `#define HTTPHELPER_TPL` if you want to use `OpenReadTaskAsync` method.*
 
 ```csharp
 public static async Task<IDictionary<string, string>> GetRequestToken(string consumerKey, string consumerSecret, CancellationToken cancellationToken = default (CancellationToken))
