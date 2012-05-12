@@ -18,6 +18,7 @@ a http client wrapper, such as for Facebook, Github, Twitter, Google etc.)
 * WINRT (Windows Metro Style Applications)
 * Silverlight 4.0
 * Windows Phone 7
+* Portable Library - `#define HTTPHELPER_PORTABLE_LIBRARY`
 * Mono
 
 ## NuGet

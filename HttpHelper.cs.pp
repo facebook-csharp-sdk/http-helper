@@ -19,6 +19,7 @@
 
 // Install-Package HttpHelper
 
+//#define HTTPHELPER_PORTABLE_LIBRARY
 //#define HTTPHELPER_TPL
 //#define HTTPHELPER_HELPERS
 //#define HTTPHELPER_STREAM
@@ -36,6 +37,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -105,7 +107,7 @@ namespace $rootnamespace$
             set { _httpWebRequest.Headers = value; }
         }
 
-#if !NETFX_CORE
+#if !(NETFX_CORE || HTTPHELPER_PORTABLE_LIBRARY)
         /// <summary>
         /// Gets or sets a value that indicates whether the request should follow redirection responses.
         /// </summary>
@@ -116,7 +118,7 @@ namespace $rootnamespace$
         }
 #endif
 
-#if !(WINDOWS_PHONE || NETFX_CORE)
+#if !(WINDOWS_PHONE || NETFX_CORE || HTTPHELPER_PORTABLE_LIBRARY)
 
         /// <summary>
         /// Gets or sets the content length.
@@ -137,7 +139,7 @@ namespace $rootnamespace$
         }
 #endif
 
-#if !NETFX_CORE
+#if !(NETFX_CORE || HTTPHELPER_PORTABLE_LIBRARY)
         /// <summary>
         /// Gets or sets the user agent.
         /// </summary>
@@ -186,6 +188,16 @@ namespace $rootnamespace$
 #if !SILVERLIGHT
 
 #if !NETFX_CORE
+
+#if !HTTPHELPER_PORTABLE_LIBRARY
+        /// <summary>
+        /// Gets or sets the proxy.
+        /// </summary>
+        public virtual IWebProxy Proxy
+        {
+            get { return _httpWebRequest.Proxy; }
+            set { _httpWebRequest.Proxy = value; }
+        }
 
         /// <summary>
         /// Gets the service point to use for the request.
@@ -266,17 +278,9 @@ namespace $rootnamespace$
                 get { return _httpWebRequest.TransferEncoding; }
                 set { _httpWebRequest.TransferEncoding = value; }
         }
-
 #endif
 
-        /// <summary>
-        /// Gets or sets the proxy.
-        /// </summary>
-        public virtual IWebProxy Proxy
-        {
-            get { return _httpWebRequest.Proxy; }
-            set { _httpWebRequest.Proxy = value; }
-        }
+#endif
 
 #endif
 
@@ -291,7 +295,7 @@ namespace $rootnamespace$
         /// </returns>
         public virtual bool TrySetContentLength(long contentLength)
         {
-#if !(WINDOWS_PHONE || NETFX_CORE)
+#if !(WINDOWS_PHONE || NETFX_CORE || HTTPHELPER_PORTABLE_LIBRARY)
             ContentLength = contentLength;
             return true;
 #else
@@ -310,7 +314,7 @@ namespace $rootnamespace$
         /// </returns>
         public virtual bool TrySetUserAgent(string userAgent)
         {
-#if (!(SILVERLIGHT || NETFX_CORE) || WINDOWS_PHONE)
+#if (!(SILVERLIGHT || NETFX_CORE || HTTPHELPER_PORTABLE_LIBRARY) || WINDOWS_PHONE)
             UserAgent = userAgent;
             return true;
 #else
@@ -404,7 +408,7 @@ namespace $rootnamespace$
 
 #endif
 
-#if !(SILVERLIGHT || NETFX_CORE)
+#if !(SILVERLIGHT || NETFX_CORE || HTTPHELPER_PORTABLE_LIBRARY)
 
         /// <summary>
         /// Gets the response.
@@ -554,7 +558,7 @@ namespace $rootnamespace$
         }
 
 #if !SILVERLIGHT
-#if !NETFX_CORE
+#if !(NETFX_CORE || HTTPHELPER_PORTABLE_LIBRARY)
 
         /// <summary>
         /// Gets the content encoding.
@@ -622,7 +626,7 @@ namespace $rootnamespace$
     /// <summary>
     /// Wrapper for web exceptions.
     /// </summary>
-#if !(NETFX_CORE || SILVERLIGHT)
+#if !(NETFX_CORE || SILVERLIGHT || HTTPHELPER_PORTABLE_LIBRARY)
         [Serializable]
 #endif
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -646,7 +650,7 @@ namespace $rootnamespace$
             _status = webException == null ? WebExceptionStatus.UnknownError : webException.Status;
         }
 
-#if !(NETFX_CORE || SILVERLIGHT)
+#if !(NETFX_CORE || SILVERLIGHT || HTTPHELPER_PORTABLE_LIBRARY)
         /// <summary>
         /// Initializes a new instance of the <see cref="WebExceptionWrapper"/> class.
         /// </summary>
@@ -897,7 +901,7 @@ namespace $rootnamespace$
             get { return _httpWebResponse; }
         }
 
-#if !(SILVERLIGHT || NETFX_CORE)
+#if !(SILVERLIGHT || NETFX_CORE || HTTPHELPER_PORTABLE_LIBRARY)
 
         /// <summary>
         /// Opens the request stream synchronously for write.
@@ -992,7 +996,7 @@ namespace $rootnamespace$
 
                     int timeout = 0;
 
-#if !(SILVERLIGHT || NETFX_CORE)
+#if !(SILVERLIGHT || NETFX_CORE || HTTPHELPER_PORTABLE_LIBRARY)
                     if (HttpWebRequest.Timeout > 0)
                             timeout = HttpWebRequest.Timeout;
 #endif
@@ -1002,7 +1006,7 @@ namespace $rootnamespace$
 
                     if (timeout > 0)
                     {
-#if NETFX_CORE
+#if NETFX_CORE || HTTPHELPER_PORTABLE_LIBRARY
                         // todo
 #else
                         ThreadPool.RegisterWaitForSingleObject(asyncResult.AsyncWaitHandle, ScanTimoutCallback, userToken, timeout, true);
