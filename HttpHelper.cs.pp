@@ -2378,7 +2378,25 @@ namespace $rootnamespace$
 
         public delegate byte[] HmacSha1Delegate(byte[] key, byte[] data);
 
-#if !HTTPHELPER_PORTABLE_LIBRARY
+#if NETFX_CORE
+
+        public static byte[] HmacSha1(byte[] key, byte[] data)
+        {
+            var crypt = Windows.Security.Cryptography.Core.MacAlgorithmProvider.OpenAlgorithm("HMAC_SHA1");
+            var keyBuffer = Windows.Security.Cryptography.CryptographicBuffer.CreateFromByteArray(key);
+            var cryptKey = crypt.CreateKey(keyBuffer);
+
+            var dataBuffer = Windows.Security.Cryptography.CryptographicBuffer.CreateFromByteArray(data);
+            var signBuffer = Windows.Security.Cryptography.Core.CryptographicEngine.Sign(cryptKey, dataBuffer);
+
+            byte[] result;
+            Windows.Security.Cryptography.CryptographicBuffer.CopyToByteArray(signBuffer, out result);
+
+            return result;
+        }
+
+#elif !HTTPHELPER_PORTABLE_LIBRARY
+
         /// <remarks>HMACSHA1 for portable library can be found in the contrib project at http://pclcontrib.codeplex.com</remarks>
         public static byte[] HmacSha1(byte[] key, byte[] data)
         {
@@ -2387,6 +2405,7 @@ namespace $rootnamespace$
                 return hmacSha1.ComputeHash(data);
             }
         }
+        
 #endif
 
         #endregion
