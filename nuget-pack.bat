@@ -1,3 +1,4 @@
 @echo off
-NuGet.exe pack HttpHelper.nuspec
+copy README.md readme.txt
+NuGet.exe pack HttpHelper.nuspec -verbose
 pause

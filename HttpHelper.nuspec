@@ -14,6 +14,7 @@
         <tags>HttpHelper web REST HTTP API services wrapper FluentHttp</tags>
     </metadata>
 	<files>
-		<file src="HttpHelper.cs.pp" target="content\HttpHelper.cs.pp" />
+                <file src="HttpHelper.cs.pp" target="content\HttpHelper.cs.pp" />
+                <file src="readme.txt" target="readme.txt" />
 	</files>
 </package>
