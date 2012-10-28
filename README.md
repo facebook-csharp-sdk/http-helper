@@ -15,7 +15,7 @@ a http client wrapper, such as for Facebook, Github, Twitter, Google etc.)
 * .NET 3.5 (client profile supported)
 * .NET 3.0
 * .NET 2.0
-* Windows 8 Metro Style Applications - WinRT (Windows 8 Consumer Preview)
+* Windows 8 Metro Style Applications - WinRT
 * Silverlight 4.0+
 * Windows Phone 7+
 * Portable Library - `#define HTTPHELPER_PORTABLE_LIBRARY`
