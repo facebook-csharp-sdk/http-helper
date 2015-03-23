@@ -1395,7 +1395,7 @@ namespace $rootnamespace$
                     ? Uri.EscapeDataString(s.Substring(MAX_LIMIT*i, MAX_LIMIT))
                     : Uri.EscapeDataString(s.Substring(MAX_LIMIT*i)));
             }
-            return s;
+            return sb.ToString();
         }
 
         public static string UrlEncodeRfc3986(string s)
